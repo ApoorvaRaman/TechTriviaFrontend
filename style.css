@@ -1,12 +1,9 @@
-/* ==== General Reset ==== */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   font-family: Arial, sans-serif;
 }
-
-/* ==== Body ==== */
 body {
   background: linear-gradient(135deg, #ff4d4d, #ffcc00, #ff8800);
   min-height: 100vh;
@@ -18,21 +15,15 @@ body {
   padding: 20px;
   color: #fff;
 }
-
-/* ==== Heading ==== */
 h1 {
   font-size: 2.5rem;
   margin-bottom: 10px;
   text-shadow: 2px 2px 5px rgba(0,0,0,0.2);
 }
-
-/* ==== Paragraph ==== */
 p {
   font-size: 1.2rem;
   margin-bottom: 20px;
 }
-
-/* ==== Button ==== */
 button {
   background-color: #ff4d4d;
   border: none;
@@ -45,12 +36,24 @@ button {
   transition: transform 0.2s, background-color 0.3s;
   box-shadow: 0 4px 6px rgba(0,0,0,0.2);
 }
-
 button:hover {
   background-color: #ff8800;
   transform: scale(1.05);
 }
+@media (max-width: 768px) {
+  body {
+    padding: 15px;
+    font-size: 16px;
+  }
 
+  h1 {
+    font-size: 1.8rem;
+  }
+  button {
+    width: 100%;   
+    margin: 5px 0;
+  }
+}
 button:active {
   background-color: #ffcc00;
   transform: scale(0.95);
