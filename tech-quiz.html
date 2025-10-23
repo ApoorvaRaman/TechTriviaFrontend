@@ -2,74 +2,86 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>TechTrivia Quiz</title>
+<title>TechTrivia</title>
 <style>
-body {
-  font-family: Arial, sans-serif;
-  background: #f4f7f8;
-  padding: 20px;
-  max-width: 900px;
-  margin: auto;
-}
-h1 {
-  color: #2c3e50;
-  text-align: center;
-}
-#quiz-container {
-  background: white;
-  padding: 25px 30px;
-  border-radius: 12px;
-  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-  margin-top: 30px;
-}
-h2 {
-  color: #34495e;
-}
-button {
-  display: block;
-  width: 100%;
-  text-align: left;
-  margin: 10px 0;
-  padding: 12px;
-  font-size: 16px;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-button:hover {
-  transform: scale(1.02);
-}
-.correct { background-color: #27ae60; color: white; }
-.wrong { background-color: #c0392b; color: white; }
-#next-btn {
-  width: auto;
-  background-color: #2980b9;
-  color: white;
-  margin-top: 15px;
-}
-#score {
-  font-size: 18px;
-  margin-top: 20px;
-  text-align: right;
-  color: #2c3e50;
-}
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #4A90E2, #50E3C2);
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+  }
+  .container {
+    max-width: 800px;
+    margin: 50px auto;
+    background: white;
+    padding: 30px 40px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    animation: fadeIn 0.8s ease;
+  }
+  @keyframes fadeIn {
+    from {opacity:0; transform: translateY(-20px);}
+    to {opacity:1; transform: translateY(0);}
+  }
+  h1 { text-align: center; color: #1f4e79; margin-bottom: 10px; }
+  #quiz-container h2 { color: #1f4e79; margin-bottom: 15px; }
+  button {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.1s ease, box-shadow 0.2s ease;
+  }
+  button:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+  .correct { background-color: #28a745; color: white; }
+  .wrong { background-color: #dc3545; color: white; }
+  #next-btn { background-color: #1f4e79; color: white; }
+  #score { text-align: center; font-size: 18px; margin-top: 20px; padding: 10px; background-color: #e1eaf4; border-radius: 8px; }
+  .progress-bar { height: 12px; background: #e1eaf4; border-radius: 8px; overflow: hidden; margin-bottom: 20px; }
+  .progress { height: 100%; background: #1f4e79; width: 0%; transition: width 0.4s ease; }
+  /* Button bounce animation */
+  .bounce {
+    animation: bounceAnim 0.3s ease;
+  }
+  @keyframes bounceAnim {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+  }
+  /* Confetti */
+  .confetti {
+    position: fixed;
+    width: 10px;
+    height: 10px;
+    background-color: #FFD700;
+    top: 0;
+    pointer-events: none;
+    opacity: 0.9;
+    animation: fall 3s linear forwards;
+  }
+  @keyframes fall {
+    to { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+  }
 </style>
 </head>
 <body>
-
-<h1>TechTrivia Quiz</h1>
-
-<div id="quiz-container">
-  <div id="question-area"></div>
-  <div id="options-area"></div>
-  <button id="next-btn" style="display:none;">Next Question</button>
+<div class="container">
+  <h1>TechTrivia</h1>
+  <div class="progress-bar"><div class="progress" id="progress"></div></div>
+  <div id="quiz-container">
+    <div id="question-area"></div>
+    <div id="options-area"></div>
+    <button id="next-btn" style="display:none;">Next Question</button>
+  </div>
+  <div id="score"></div>
 </div>
 
-<div id="score"></div>
-
 <script>
-// 10 sample tech questions
 const questions = [
   { q: "Which device is considered the 'brain' of the computer?", opts: ["Hard Disk","CPU","RAM","Monitor"], ans: 1 },
   { q: "Which of the following is an input device?", opts: ["Printer","Monitor","Keyboard","Speaker"], ans: 2 },
@@ -90,16 +102,17 @@ const qArea = document.getElementById("question-area");
 const optArea = document.getElementById("options-area");
 const nextBtn = document.getElementById("next-btn");
 const scoreDiv = document.getElementById("score");
+const progressBar = document.getElementById("progress");
 
 function showQuestion() {
   qArea.innerHTML = `<h2>Q${currentQ+1}: ${questions[currentQ].q}</h2>`;
   optArea.innerHTML = '';
   nextBtn.style.display = 'none';
-
   questions[currentQ].opts.forEach((opt, i) => {
     const btn = document.createElement("button");
     btn.innerText = opt;
     btn.onclick = () => {
+      btn.classList.add('bounce');
       if(i === questions[currentQ].ans) {
         btn.classList.add("correct");
         score++;
@@ -110,6 +123,7 @@ function showQuestion() {
       Array.from(optArea.getElementsByTagName("button")).forEach(b => b.disabled = true);
       nextBtn.style.display = 'inline-block';
       scoreDiv.innerText = `Score: ${score} / ${questions.length}`;
+      progressBar.style.width = `${((currentQ+1)/questions.length)*100}%`;
     };
     optArea.appendChild(btn);
   });
@@ -123,12 +137,25 @@ nextBtn.onclick = () => {
     optArea.innerHTML = '';
     nextBtn.style.display = 'none';
     scoreDiv.innerHTML = `<strong>Final Score: ${score} / ${questions.length}</strong>`;
+    progressBar.style.width = '100%';
+    if(score === questions.length) triggerConfetti();
   }
 };
 
-// start first question
+function triggerConfetti() {
+  for(let i=0; i<100; i++){
+    const confetti = document.createElement('div');
+    confetti.classList.add('confetti');
+    confetti.style.left = Math.random()*100 + 'vw';
+    confetti.style.backgroundColor = `hsl(${Math.random()*360}, 70%, 60%)`;
+    confetti.style.animationDuration = 2 + Math.random()*2 + 's';
+    document.body.appendChild(confetti);
+    setTimeout(() => confetti.remove(), 4000);
+  }
+}
+
+// Start quiz
 showQuestion();
 </script>
-
 </body>
 </html>
