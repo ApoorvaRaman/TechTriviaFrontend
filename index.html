@@ -1,19 +1,44 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
   <title>TechTrivia</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <h1>Welcome to TechTrivia 🎯</h1>
   <p>A fun computer quiz platform!</p>
+
+  <!-- Start button -->
   <button onclick="showTopics()">Start Quiz</button>
+
+  <!-- Topic selection -->
   <div id="topic-selection" style="display:none; margin-top:20px;">
     <h2>Choose a Topic</h2>
     <button onclick="startQuiz('tech')">Tech</button>
     <button onclick="startQuiz('programming')">Programming</button>
     <button onclick="startQuiz('dsa-toc')">DSA</button>
   </div>
+
+  <!-- Demo link for tech.json -->
+  <div style="margin-top:30px;">
+    <h2>Or Try a Quick Demo:</h2>
+    <a href="/tech-quiz.html" style="text-decoration:none; font-size:18px; padding:8px 12px; background-color:#4CAF50; color:white; border-radius:5px;">
+      Start TechTrivia Demo
+    </a>
+  </div>
+
   <script src="script.js"></script>
+
+  <script>
+    function showTopics() {
+      document.getElementById('topic-selection').style.display = 'block';
+    }
+
+    function startQuiz(topic) {
+      // You can later redirect to dynamic quiz pages depending on topic
+      alert('You selected topic: ' + topic + '. Backend quiz not implemented yet.');
+    }
+  </script>
 </body>
 </html>
